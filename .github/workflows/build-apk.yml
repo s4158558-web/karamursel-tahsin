@@ -32,10 +32,8 @@ jobs:
           PROJECT_DIR="$(dirname "$(find apk_project -name settings.gradle -print -quit)")"
           echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
 
-      - name: Kapağı Android projesine ekle
-   run: |
-    mkdir -p "$PROJECT_DIR/app/src/main/res/drawable"
-    cp kapak.png "$PROJECT_DIR/app/src/main/res/drawable/kapak.png"
+            - name: Kapağı Android projesine ekle
+          run: mkdir -p "$PROJECT_DIR/app/src/main/res/drawable" && cp kapak.png "$PROJECT_DIR/app/src/main/res/drawable/kapak.png"
 
       - name: Kotlin çakışmasını düzelt  
         run: |
