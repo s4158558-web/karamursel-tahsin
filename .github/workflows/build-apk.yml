@@ -31,20 +31,30 @@ jobs:
           rm -rf apk_project
           mkdir -p apk_project
           unzip -q "Karamursel_Tahsin_APK_Projesi.zip" -d apk_project
+
           SETTINGS_FILE="$(find apk_project -name settings.gradle -type f -print -quit)"
+
           if [ -z "$SETTINGS_FILE" ]; then
             echo "settings.gradle bulunamadı"
             exit 1
           fi
+
           PROJECT_DIR="$(dirname "$SETTINGS_FILE")"
           echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
           echo "Proje bulundu: $PROJECT_DIR"
 
-      - name: Kapağı Android projesine ekle
+      - name: Kotlin sürümünü düzelt
+        shell: bash
+        run: |
+          find "$PROJECT_DIR" -type f \( -name "*.gradle" -o -name "*.gradle.kts" \) -print0 | xargs -0 sed -i 's/1\.6\.21/1.8.22/g'
+
+      - name: Karamürsel Tahsin ikonunu ekle
         shell: bash
         run: |
           mkdir -p "$PROJECT_DIR/app/src/main/res/drawable"
-          cp kapak.png "$PROJECT_DIR/app/src/main/res/drawable/kapak.png"
+          cp "kapak.png" "$PROJECT_DIR/app/src/main/res/drawable/kapak.png"
+          sed -i 's/@mipmap\/ic_launcher/@drawable\/kapak/g' "$PROJECT_DIR/app/src/main/AndroidManifest.xml"
+          sed -i 's/@mipmap\/ic_launcher_round/@drawable\/kapak/g' "$PROJECT_DIR/app/src/main/AndroidManifest.xml"
 
       - name: APK oluştur
         shell: bash
