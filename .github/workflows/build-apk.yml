@@ -31,7 +31,9 @@ jobs:
           unzip -q Karamursel_Tahsin_APK_Projesi.zip -d apk_project
           PROJECT_DIR="$(dirname "$(find apk_project -name settings.gradle -print -quit)")"
           echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
-
+      - name: Kotlin çakışmasını düzelt
+        run: |
+          sed -i "/dependencies {/i configurations.all {\n    exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'\n}\n" "$PROJECT_DIR/app/build.gradle"
       - name: APK oluştur
         run: |
           cd "$PROJECT_DIR"
