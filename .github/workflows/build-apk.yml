@@ -20,16 +20,16 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - - name: Gradle 8.9 kur
+      - name: Gradle 8.9 kur
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
 
       - name: APK projesini ZIP'ten çıkar
         run: |
-          mkdir apk_project
+          mkdir -p apk_project
           unzip -q Karamursel_Tahsin_APK_Projesi.zip -d apk_project
-          PROJECT_DIR=$(dirname "$(find apk_project -name settings.gradle -print -quit)")
+          PROJECT_DIR="$(dirname "$(find apk_project -name settings.gradle -print -quit)")"
           echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
 
       - name: APK oluştur
@@ -41,5 +41,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Karamursel-Tahsin-APK
-          path: |
-            **/build/outputs/apk/debug/*.apk
+          path: "**/build/outputs/apk/debug/*.apk"
