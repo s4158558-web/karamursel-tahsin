@@ -26,20 +26,28 @@ jobs:
           gradle-version: '8.9'
 
       - name: APK projesini ZIP'ten çıkar
+        shell: bash
         run: |
+          rm -rf apk_project
           mkdir -p apk_project
-          unzip -q Karamursel_Tahsin_APK_Projesi.zip -d apk_project
-          PROJECT_DIR="$(dirname "$(find apk_project -name settings.gradle -print -quit)")"
+          unzip -q "Karamursel_Tahsin_APK_Projesi.zip" -d apk_project
+          SETTINGS_FILE="$(find apk_project -name settings.gradle -type f -print -quit)"
+          if [ -z "$SETTINGS_FILE" ]; then
+            echo "settings.gradle bulunamadı"
+            exit 1
+          fi
+          PROJECT_DIR="$(dirname "$SETTINGS_FILE")"
           echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
+          echo "Proje bulundu: $PROJECT_DIR"
 
-            - name: Kapağı Android projesine ekle
-          run: mkdir -p "$PROJECT_DIR/app/src/main/res/drawable" && cp kapak.png "$PROJECT_DIR/app/src/main/res/drawable/kapak.png"
-
-      - name: Kotlin çakışmasını düzelt  
+      - name: Kapağı Android projesine ekle
+        shell: bash
         run: |
-          sed -i "/dependencies {/a\\    configurations.all {\\n        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'\\n    }" "$PROJECT_DIR/app/build.gradle"
+          mkdir -p "$PROJECT_DIR/app/src/main/res/drawable"
+          cp kapak.png "$PROJECT_DIR/app/src/main/res/drawable/kapak.png"
 
       - name: APK oluştur
+        shell: bash
         run: |
           cd "$PROJECT_DIR"
           gradle assembleDebug
