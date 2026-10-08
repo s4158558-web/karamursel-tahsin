@@ -33,11 +33,11 @@ jobs:
           echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
 
       - name: Kapağı Android projesine ekle
-        run: |
-          cp kapak.png "$PROJECT_DIR/app/src/main/res/drawable/kapak.png"
-          sed -i 's/android:label="Karamursel Tahsin"/android:label="Karamursel Tahsin" android:icon="@drawable\/kapak"/' "$PROJECT_DIR/app/src/main/AndroidManifest.xml"
+   run: |
+    mkdir -p "$PROJECT_DIR/app/src/main/res/drawable"
+    cp kapak.png "$PROJECT_DIR/app/src/main/res/drawable/kapak.png"
 
-      - name: Kotlin çakışmasını düzelt
+      - name: Kotlin çakışmasını düzelt  
         run: |
           sed -i "/dependencies {/a\\    configurations.all {\\n        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'\\n    }" "$PROJECT_DIR/app/build.gradle"
 
